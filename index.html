@@ -317,10 +317,14 @@ function render() {
     }).join('')}
   </tbody></table>`;
 }
-fetch('launched-coins.json')
-  .then(r => r.ok ? r.json() : null)
-  .then(data => { if (data && data.launched) COIN_DATA = data.launched; render(); })
-  .catch(() => render());
+function fetchFeed() {
+  fetch('launched-coins.json?t=' + Date.now())
+    .then(r => r.ok ? r.json() : null)
+    .then(data => { if (data && data.launched) COIN_DATA = data.launched; render(); })
+    .catch(() => render());
+}
+fetchFeed();
+setInterval(fetchFeed, 30000);
 
 function updateClock() {
   const now = new Date();
