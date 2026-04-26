@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>How The Bot Works — WATCHER</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    :root{--black:#000000;--dark:#0a0a0a;--panel:#111111;--border:#1e1e1e;--gray:#555555;--muted:#2e2e2e;--white:#e0e0e0;--dim:#888888;--red:#cc2200;--red-glow:#ff3300;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--black);color:var(--white);font-family:'Share Tech Mono',monospace;overflow-x:hidden;cursor:none;}
+    body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(255,255,255,0.01) 3px,rgba(255,255,255,0.01) 4px);pointer-events:none;z-index:9000;}
+    body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 35%,rgba(0,0,0,0.75) 100%);pointer-events:none;z-index:8999;}
+    .cursor{width:4px;height:4px;background:var(--red-glow);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);box-shadow:0 0 8px var(--red-glow);}
+    .cursor-ring{width:22px;height:22px;border:1px solid rgba(255,51,0,0.35);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform 0.22s ease;}
+
+    .ribbon{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:48px;background:rgba(0,0,0,0.95);border-bottom:1px solid var(--border);backdrop-filter:blur(8px);}
+    .ribbon-left{display:flex;align-items:center;gap:1rem;flex-shrink:0;}
+    .r-item{font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.6);}
+    .r-link{text-decoration:none;transition:color 0.2s;cursor:none;}.r-link:hover{color:#ffffff;}
+    .r-sep{color:rgba(255,255,255,0.3);padding:0 0.1rem;font-size:0.7rem;}
+    .ribbon-right{display:flex;align-items:center;gap:0.5rem;flex-shrink:0;}
+    .rec-dot{width:7px;height:7px;background:var(--red-glow);border-radius:50%;box-shadow:0 0 8px var(--red-glow);animation:recBlink 1.8s ease-in-out infinite;}
+    @keyframes recBlink{0%,100%{opacity:1;box-shadow:0 0 8px var(--red-glow);}50%{opacity:0.05;box-shadow:none;}}
+    .rec-label{font-size:1.1rem;letter-spacing:4px;color:#ffffff;font-family:'Bebas Neue',sans-serif;}
+
+    .page{padding:7rem 2rem 5rem;max-width:860px;margin:0 auto;}
+
+    .page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,7vw,5rem);letter-spacing:5px;color:var(--white);line-height:1;margin-bottom:0.5rem;}
+    .page-sub{font-size:0.55rem;letter-spacing:4px;text-transform:uppercase;color:var(--dim);margin-bottom:3.5rem;}
+
+    .diagram{width:100%;border:1px solid var(--border);margin-bottom:3.5rem;overflow:hidden;}
+    .diagram img{width:100%;display:block;}
+
+    .steps{display:flex;flex-direction:column;gap:0px;border:1px solid var(--border);margin-bottom:3.5rem;}
+    .step{display:flex;gap:1.5rem;padding:1.5rem;border-bottom:1px solid var(--border);}
+    .step:last-child{border-bottom:none;}
+    .step-num{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--red-glow);line-height:1;flex-shrink:0;width:2rem;text-align:center;}
+    .step-body{}
+    .step-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;color:var(--white);margin-bottom:0.3rem;}
+    .step-desc{font-size:0.55rem;letter-spacing:1px;color:var(--dim);line-height:2;}
+
+    .back-btn{display:inline-flex;align-items:center;gap:0.5rem;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:4px;text-decoration:none;color:var(--dim);border:1px solid var(--border);padding:0.75rem 2rem;transition:color 0.2s,border-color 0.2s;cursor:none;}
+    .back-btn:hover{color:var(--white);border-color:rgba(255,255,255,0.3);}
+
+    .reveal{opacity:0;transform:translateY(14px);transition:opacity 0.7s,transform 0.7s;}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<div class="ribbon">
+  <div class="ribbon-left">
+    <a href="index.html" class="r-item r-link">← Back</a>
+    <span class="r-sep">/</span>
+    <span class="r-item">$WATCHER</span>
+    <span class="r-sep">/</span>
+    <span class="r-item">Bot System</span>
+  </div>
+  <div class="ribbon-right">
+    <div class="rec-dot"></div>
+    <span class="rec-label">REC</span>
+  </div>
+</div>
+
+<div class="page">
+
+  <div class="reveal">
+    <h1 class="page-title">How The Bot Works</h1>
+    <p class="page-sub">Automated flood system &nbsp;·&nbsp; Solana &nbsp;·&nbsp; Pump.fun</p>
+  </div>
+
+  <div class="diagram reveal">
+    <img src="howitworks.png" alt="How The Bot Works"/>
+  </div>
+
+  <div class="steps reveal">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Main Coin Launches</div>
+        <div class="step-desc">$WATCHER goes live on Pump.fun. Trading begins. Dev fees from every trade flow automatically into Wallet B.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Bot Watches Wallet B</div>
+        <div class="step-desc">The bot checks Wallet B every 30 seconds. Once fees hit the 0.03 SOL threshold, it activates.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Flood Coins Launch</div>
+        <div class="step-desc">67% of fees are used to launch identical flood coins — same name, ticker, logo, and links. Each launch costs 0.02 SOL. Up to 10 active at once.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Flood Coins Sell</div>
+        <div class="step-desc">All flood coins are dumped at once. Proceeds stay in Wallet B as profit. Sell money is never reinvested.</div>
+      </div>
+    </div>
+  </div>
+
+  <a href="index.html" class="back-btn reveal">← Return to Watcher</a>
+
+</div>
+
+<script>
+const cur = document.getElementById('cursor');
+const rng = document.getElementById('ring');
+document.addEventListener('mousemove', e => {
+  cur.style.transform = `translate(${e.clientX}px,${e.clientY}px) translate(-50%,-50%)`;
+  rng.style.transform = `translate(${e.clientX}px,${e.clientY}px) translate(-50%,-50%)`;
+});
+const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
