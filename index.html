@@ -305,12 +305,12 @@ function render() {
     return;
   }
   const s = [...COIN_DATA].sort((a,b) => new Date(b.launchedAt)-new Date(a.launchedAt));
-  el.innerHTML = `<table><thead><tr><th>Coin</th><th>Launched</th><th>Status</th><th>P&L</th><th>Link</th></tr></thead><tbody>
+  el.innerHTML = `<table><thead><tr><th>Coin</th><th>Launched</th><th>Status</th><th>CA</th><th>Link</th></tr></thead><tbody>
     ${s.map(c=>{
-      const pnl = c.sold&&c.returnedSol!=null ? c.returnedSol-c.spentSol : null;
+      const shortCa = c.mint ? c.mint.slice(0,6)+'...'+c.mint.slice(-4) : '—';
       return `<tr><td>$${c.ticker}</td><td>${timeAgo(c.launchedAt)}</td>
         <td class="${c.sold?'s-sold':'s-live'}">${c.sold?'SOLD':'LIVE'}</td>
-        <td class="${pnl==null?'':pnl>=0?'p-pos':'p-neg'}">${pnl==null?'—':(pnl>=0?'+':'')+pnl.toFixed(4)+' SOL'}</td>
+        <td><span class="p-link" style="cursor:pointer;" onclick="navigator.clipboard.writeText('${c.mint}')" title="${c.mint}">${shortCa}</span></td>
         <td><a href="${c.pumpUrl}" target="_blank" class="p-link">pump.fun ↗</a></td></tr>`;
     }).join('')}
   </tbody></table>`;

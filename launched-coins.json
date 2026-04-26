@@ -1,0 +1,13 @@
+{
+  "launched": [
+    {
+      "name": "TEST COIN",
+      "ticker": "TEST",
+      "mint": "test111111111111111111111111111111111111111",
+      "launchedAt": "2026-04-26T12:00:00Z",
+      "spentSol": 0.02,
+      "sold": false,
+      "pumpUrl": "https://pump.fun/test111111111111111111111111111111111111111"
+    }
+  ]
+}
