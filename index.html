@@ -287,10 +287,7 @@ caEl.addEventListener('click', () => {
   });
 });
 
-// ====================================================
-//  COIN DATA — paste launched-coins.json array here
-// ====================================================
-const COIN_DATA = [];
+let COIN_DATA = [];
 
 function timeAgo(iso) {
   const s = (Date.now() - new Date(iso)) / 1000;
@@ -318,7 +315,10 @@ function render() {
     }).join('')}
   </tbody></table>`;
 }
-render();
+fetch('launched-coins.json')
+  .then(r => r.ok ? r.json() : null)
+  .then(data => { if (data && data.launched) COIN_DATA = data.launched; render(); })
+  .catch(() => render());
 
 function updateClock() {
   const now = new Date();
