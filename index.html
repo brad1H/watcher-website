@@ -275,8 +275,8 @@ if (CA !== "TBD") {
 }
 const toast = document.getElementById('copy-toast');
 let toastTimer;
-caEl.addEventListener('click', () => {
-  navigator.clipboard.writeText(CA).then(() => {
+function showCopyToast(text) {
+  navigator.clipboard.writeText(text).then(() => {
     clearTimeout(toastTimer);
     toast.classList.remove('hide');
     toast.classList.add('show');
@@ -285,7 +285,8 @@ caEl.addEventListener('click', () => {
       toast.classList.add('hide');
     }, 1800);
   });
-});
+}
+caEl.addEventListener('click', () => showCopyToast(CA));
 
 let COIN_DATA = [];
 
@@ -310,7 +311,7 @@ function render() {
       const shortCa = c.mint ? c.mint.slice(0,6)+'...'+c.mint.slice(-4) : '—';
       return `<tr><td>$${c.ticker}</td><td>${timeAgo(c.launchedAt)}</td>
         <td class="${c.sold?'s-sold':'s-live'}">${c.sold?'SOLD':'LIVE'}</td>
-        <td><span class="p-link" style="cursor:pointer;" onclick="navigator.clipboard.writeText('${c.mint}')" title="${c.mint}">${shortCa}</span></td>
+        <td><span class="p-link" style="cursor:pointer;" onclick="showCopyToast('${c.mint}')" title="${c.mint}">${shortCa}</span></td>
         <td><a href="${c.pumpUrl}" target="_blank" class="p-link">pump.fun ↗</a></td></tr>`;
     }).join('')}
   </tbody></table>`;
