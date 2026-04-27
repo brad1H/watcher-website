@@ -32,8 +32,8 @@
     .ribbon-buy-btn span{position:relative;z-index:1;}
     .ribbon-center{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:0.6rem;white-space:nowrap;}
     .r-ca-label{font-family:'Share Tech Mono',monospace;font-size:0.65rem;letter-spacing:3px;color:rgba(255,255,255,0.5);text-transform:uppercase;}
-    .r-ca-val{font-family:'Share Tech Mono',monospace;font-size:1rem;letter-spacing:3px;color:#ffffff;font-weight:700;cursor:pointer;transition:color 0.2s;text-shadow:0 0 8px rgba(255,255,255,0.6);}
-    .r-ca-val:hover{color:var(--red-glow);}
+    .r-ca-val{font-family:'Share Tech Mono',monospace;font-size:1rem;letter-spacing:3px;color:#ffffff;font-weight:700;cursor:pointer;transition:color 0.2s,transform 0.2s,text-shadow 0.2s;text-shadow:0 0 8px rgba(255,255,255,0.6);display:inline-block;}
+    .r-ca-val:hover{color:var(--red-glow);transform:scale(1.15);text-shadow:0 0 14px rgba(255,51,0,0.8);}
     .ribbon-right{display:flex;align-items:center;gap:0.5rem;flex-shrink:0;}
     .rec-dot{width:7px;height:7px;background:var(--red-glow);border-radius:50%;box-shadow:0 0 8px var(--red-glow);animation:recBlink 1.8s ease-in-out infinite;}
     @keyframes recBlink{0%,100%{opacity:1;box-shadow:0 0 8px var(--red-glow);}50%{opacity:0.05;box-shadow:none;}}
