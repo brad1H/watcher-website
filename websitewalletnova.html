@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova Wallet</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500&family=Inter:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080808;
+  --surface:#111111;
+  --surface2:#181818;
+  --border:rgba(255,255,255,0.06);
+  --border2:rgba(255,255,255,0.11);
+  --text:#F2F0FF;
+  --muted:#6B6880;
+  --purple:#9B8CFF;
+  --purple-bright:#B8ADFF;
+  --purple-dim:rgba(155,140,255,0.1);
+  --purple-border:rgba(155,140,255,0.22);
+  --green:#3ECFA0;
+  --red:#FF6B6B;
+  --green-dim:rgba(62,207,160,0.1);
+  --green-border:rgba(62,207,160,0.25);
+}
+body{background-color:#020204;background-image:radial-gradient(ellipse 120% 80% at 50% 0%,#110d24 0%,#08060f 40%,#020204 100%);background-attachment:fixed;background-repeat:no-repeat;color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;min-height:100vh}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:10px 44px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;background:rgba(8,8,8,0.95);backdrop-filter:blur(16px)}
+
+/* HUB */
+.hub{min-height:100vh;display:flex;flex-direction:column;background:#080808;position:relative}
+.hub::after{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)'/%3E%3C/svg%3E");opacity:0.03;pointer-events:none;z-index:0}
+.hub-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 44px;border-bottom:1px solid var(--border);background:rgba(8,8,8,0.95);backdrop-filter:blur(16px);position:relative;z-index:2}
+.hub-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 44px;position:relative;z-index:1}
+.hub-label{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--purple);margin-bottom:36px}
+.hub-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:760px}
+.hub-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:44px 40px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;flex-direction:column}
+.hub-card:hover{border-color:var(--purple-border);background:var(--surface2);transform:translateY(-3px)}
+.hub-card-icon{font-size:32px;margin-bottom:20px}
+.hub-card-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.5px;margin-bottom:12px}
+.hub-card-desc{font-size:13px;color:var(--muted);line-height:1.8;flex:1;margin-bottom:28px}
+.hub-card-cta{font-size:13px;color:var(--purple-bright);font-weight:500}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:32px;height:32px;background:var(--purple-dim);border:1px solid var(--purple-border);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;letter-spacing:-0.3px}
+.logo-text .w{color:var(--text)}
+.logo-text .n{color:var(--purple-bright)}
+.nav-links{display:flex;gap:6px}
+.nav-link{background:none;border:none;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted);cursor:pointer;padding:8px 12px;border-radius:6px;transition:color 0.15s}
+.nav-link:hover{color:var(--text)}
+.nav-link.active{color:var(--text);background:var(--surface)}
+
+/* HERO */
+.landing{min-height:100vh;display:flex;flex-direction:column;padding:36px 44px 48px;box-sizing:border-box;position:relative;overflow:hidden}
+.landing::after{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)'/%3E%3C/svg%3E");opacity:0.032;pointer-events:none;z-index:3}
+.blob{position:absolute;border-radius:50%;pointer-events:none;z-index:0}
+.b1{width:700px;height:700px;top:-180px;left:-140px;background:radial-gradient(circle,rgba(120,70,255,0.18) 0%,transparent 68%);filter:blur(48px)}
+.b2{width:560px;height:560px;bottom:-120px;right:-100px;background:radial-gradient(circle,rgba(60,80,220,0.13) 0%,transparent 68%);filter:blur(56px)}
+.b3{width:420px;height:420px;top:38%;left:42%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(155,140,255,0.07) 0%,transparent 68%);filter:blur(70px)}
+.landing-logo{display:flex;align-items:center;position:relative;z-index:4}
+.landing-logo img{height:44px;width:auto}
+.landing-center{flex:1;display:flex;align-items:center;justify-content:center;position:relative;z-index:4}
+#center-logo{width:min(240px,38vw);flex-shrink:0;opacity:0}
+#logo-anim{display:flex;align-items:center;gap:28px}
+#logo-text-wrap{overflow:hidden}
+#hero-logo-text{font-family:'Inter',sans-serif;font-weight:800;font-size:clamp(52px,7vw,84px);letter-spacing:-2px;white-space:nowrap;line-height:1;color:#fff}
+.scroll-hint{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);letter-spacing:1px;animation:bounce 2s infinite;position:relative;z-index:4}
+.scroll-hint svg{width:16px;height:16px;stroke:var(--muted)}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+@keyframes fadeInLogo{0%{opacity:0;transform:scale(0.96)}100%{opacity:1;transform:scale(1)}}
+#emoji-bg{position:absolute;inset:0;pointer-events:none;z-index:1;transition:opacity 0.3s ease}
+.be{position:absolute;user-select:none;will-change:transform;line-height:1}
+.hero{padding:72px 44px 56px;max-width:760px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--purple-dim);border:1px solid var(--purple-border);border-radius:100px;padding:5px 14px;font-size:11px;color:var(--purple-bright);margin-bottom:24px;letter-spacing:0.5px}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:var(--purple-bright);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+h1{font-family:'Syne',sans-serif;font-size:clamp(36px,5vw,60px);font-weight:800;line-height:1.03;letter-spacing:-2px;margin-bottom:18px}
+h1 .hl{color:var(--purple-bright)}
+.hero-sub{font-size:15px;color:var(--muted);max-width:500px;line-height:1.8;margin-bottom:32px}
+.hero-steps{display:flex;gap:28px}
+.step{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--muted)}
+.step-num{width:22px;height:22px;border-radius:50%;background:var(--purple-dim);border:1px solid var(--purple-border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--purple-bright);font-weight:700;flex-shrink:0}
+
+/* PACKS */
+.section{padding:0 44px 60px}
+.sec-hdr{display:flex;align-items:baseline;gap:14px;margin-bottom:24px}
+.sec-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--purple)}
+.sec-sub{font-size:12px;color:var(--muted)}
+
+.packs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+
+.pack-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:28px;display:flex;flex-direction:column;gap:0;transition:border-color 0.15s;position:relative;overflow:hidden}
+.pack-card.live{border-color:var(--purple-border)}
+.pack-card.live::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple),var(--purple-bright))}
+.pack-card.soon{opacity:0.55}
+
+.pack-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px}
+.pack-icon{font-size:28px;line-height:1}
+.pack-status{font-size:10px;font-weight:700;letter-spacing:1.5px;padding:4px 10px;border-radius:100px}
+.status-live{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border)}
+.status-soon{background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
+
+.pack-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:-0.5px;margin-bottom:8px}
+.pack-desc{font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:22px;flex:1}
+
+.pack-meta{display:flex;gap:16px;margin-bottom:22px;padding-bottom:22px;border-bottom:1px solid var(--border)}
+.pack-meta-item{display:flex;flex-direction:column;gap:3px}
+.meta-val{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--text)}
+.meta-lbl{font-size:10px;color:var(--muted);letter-spacing:0.5px}
+
+.dl-btn{display:flex;align-items:center;justify-content:center;gap:9px;background:var(--purple);color:#080808;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;border:none;border-radius:7px;padding:13px 20px;cursor:pointer;transition:background 0.15s;width:100%}
+.dl-btn:hover{background:var(--purple-bright)}
+.dl-btn:active{transform:scale(0.99)}
+.dl-btn svg{width:15px;height:15px;flex-shrink:0}
+.dl-btn.disabled{background:var(--surface2);color:var(--muted);cursor:not-allowed;border:1px solid var(--border)}
+.dl-btn.disabled:hover{background:var(--surface2)}
+
+.dl-note{text-align:center;font-size:11px;color:var(--muted);margin-top:10px}
+.view-btn{width:100%;background:transparent;border:1px solid var(--border2);border-radius:7px;padding:10px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted);cursor:pointer;transition:all 0.15s;margin-top:8px}
+.view-btn:hover{border-color:var(--purple-border);color:var(--purple-bright)}
+
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:200;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-48%);width:min(640px,92vw);max-height:80vh;background:#0f0f0f;border:1px solid var(--border2);border-radius:12px;z-index:201;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.2s,transform 0.2s}
+.modal.open{opacity:1;pointer-events:all;transform:translate(-50%,-50%)}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border)}
+.modal-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;letter-spacing:-0.3px}
+.modal-meta{font-size:12px;color:var(--muted);margin-top:2px}
+.modal-close{background:none;border:1px solid var(--border);border-radius:6px;width:32px;height:32px;cursor:pointer;color:var(--muted);font-size:16px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;flex-shrink:0}
+.modal-close:hover{border-color:var(--border2);color:var(--text)}
+.modal-body{overflow-y:auto;padding:12px 16px;flex:1}
+.modal-body::-webkit-scrollbar{width:4px}
+.modal-body::-webkit-scrollbar-track{background:transparent}
+.modal-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.mrow{display:flex;align-items:center;gap:12px;padding:10px 8px;border-radius:6px;transition:background 0.1s}
+.mrow:hover{background:var(--surface)}
+.mrank{font-size:11px;color:var(--muted);width:24px;text-align:right;flex-shrink:0;font-family:'Syne',sans-serif;font-weight:700}
+.mrank.top{color:var(--purple-bright)}
+.memoji{font-size:18px;width:28px;text-align:center;flex-shrink:0}
+.minfo{flex:1;min-width:0}
+.mname{font-size:13px;font-weight:500;color:var(--text)}
+.maddr{font-size:11px;color:var(--muted);font-family:monospace}
+.mcopy{background:none;border:none;cursor:pointer;padding:4px 8px;font-family:'DM Sans',sans-serif;font-size:11px;color:var(--muted);border-radius:4px;transition:all 0.15s;white-space:nowrap}
+.mcopy:hover{color:var(--purple-bright);background:var(--purple-dim)}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--border)}
+.modal-footer .dl-btn{margin:0}
+
+/* DIVIDER */
+.divider{border:none;border-top:1px solid var(--border);margin:0 0 56px}
+
+/* BROWSE TABLE */
+.controls{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.search-wrap{position:relative;flex:1;max-width:340px}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:14px;height:14px;opacity:0.3;pointer-events:none}
+#search{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:6px;padding:9px 12px 9px 34px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color 0.15s}
+#search::placeholder{color:var(--muted)}
+#search:focus{border-color:var(--purple-border)}
+.rcount{font-size:12px;color:var(--muted);margin-left:auto}
+
+.col-hdr{display:grid;grid-template-columns:40px 1fr 90px 90px 130px;gap:12px;padding:0 16px 10px;font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid var(--border);margin-bottom:4px}
+.wallets{display:flex;flex-direction:column;gap:2px}
+.wrow{display:grid;grid-template-columns:40px 1fr 90px 90px 130px;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:11px 16px;transition:border-color 0.15s,background 0.15s}
+.wrow:hover{border-color:var(--purple-border);background:var(--surface2)}
+.wrank{font-size:12px;color:var(--muted);text-align:center;font-family:'Syne',sans-serif;font-weight:700}
+.wrank.top{color:var(--purple-bright)}
+.winfo .wname{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px}
+.waddr-row{display:flex;align-items:center;gap:5px}
+.waddr{font-size:11px;color:var(--muted);font-family:monospace}
+.cbtn{background:none;border:none;cursor:pointer;padding:2px;opacity:0.35;transition:opacity 0.15s;display:flex;align-items:center}
+.cbtn:hover{opacity:1}
+.cbtn svg{width:11px;height:11px;stroke:var(--purple-bright)}
+.wpnl{font-size:13px;font-weight:500}
+.pos{color:var(--green)}
+.neg{color:var(--red)}
+.na{color:var(--muted);font-size:12px}
+.wwr{font-size:13px}
+.wactions{display:flex;gap:5px}
+.abtn{background:transparent;border:1px solid var(--border);border-radius:5px;padding:5px 10px;font-family:'DM Sans',sans-serif;font-size:11px;color:var(--muted);cursor:pointer;transition:all 0.15s;text-decoration:none;display:inline-block;white-space:nowrap}
+.abtn:hover{border-color:var(--purple-border);color:var(--purple-bright)}
+
+footer{border-top:1px solid var(--border);padding:20px 44px;display:flex;justify-content:space-between;align-items:center;margin-top:20px}
+.foot-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:14px;letter-spacing:-0.3px}
+.foot-logo span{color:var(--purple-bright)}
+footer p{font-size:11px;color:var(--muted)}
+
+.landing-nav{display:flex;align-items:center;justify-content:space-between;padding:0 44px;height:64px;position:relative;z-index:4;flex-shrink:0}
+.landing-nav-logo img{height:36px;width:auto}
+.landing-nav-right{display:flex;align-items:center;gap:6px}
+.lnav-btn{background:none;border:1px solid transparent;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted);cursor:pointer;padding:8px 16px;border-radius:6px;transition:all 0.2s;text-decoration:none;display:inline-block}
+.lnav-btn:hover{color:var(--purple-bright);border-color:var(--purple-border);background:var(--purple-dim)}
+.lnav-btn.cta{color:var(--purple-bright);border-color:var(--purple-border);background:var(--purple-dim)}
+.lnav-btn.cta:hover{background:rgba(155,140,255,0.18)}
+
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a1a2e;border:1px solid var(--purple-border);border-radius:8px;padding:10px 20px;font-size:13px;color:var(--purple-bright);opacity:0;transition:all 0.2s;pointer-events:none;z-index:999}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#site-nav{position:fixed;top:14px;left:20px;right:20px;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:50px;background:rgba(110,70,200,0.08);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border:1px solid rgba(155,140,255,0.28);border-radius:100px;transition:background 0.35s ease,border-color 0.35s ease}
+#site-nav .logo img{border-radius:8px;outline:1.5px solid transparent;outline-offset:3px;transition:transform 0.25s ease,outline-color 0.2s ease}
+#site-nav .logo:hover img{transform:scale(1.09);outline-color:rgba(255,255,255,0.75)}
+#scroll-dark{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;z-index:2}
+.page{display:none;min-height:100vh}.page.active{display:block}
+#page-import,#page-leaderboard{padding-top:80px}
+.home-sec{padding:110px 44px 80px;position:relative;z-index:2}
+.home-sec-inner{max-width:900px;margin:0 auto}
+.home-sec-tag{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--purple);margin-bottom:22px}
+.home-sec-h2{font-family:'Syne',sans-serif;font-size:clamp(38px,5.5vw,68px);font-weight:800;letter-spacing:-2.5px;line-height:1.04;margin-bottom:20px}
+.home-sec-sub{font-size:15px;color:var(--muted);max-width:460px;line-height:1.85;margin-bottom:44px}
+.home-cta-btn{display:inline-flex;align-items:center;gap:10px;background:var(--purple);color:#080808;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;border:none;border-radius:8px;padding:15px 30px;cursor:pointer;transition:background 0.15s,transform 0.15s}
+.home-cta-btn:hover{background:var(--purple-bright);transform:translateY(-2px)}
+.home-cta-btn.secondary{background:transparent;color:var(--text);border:1px solid var(--border2);font-size:13px;padding:12px 24px}
+.home-cta-btn.secondary:hover{border-color:var(--purple-border);color:var(--purple-bright);background:var(--purple-dim)}
+.home-pack-preview{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:44px}
+.prev-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px 18px;transition:border-color 0.15s,transform 0.15s}
+.prev-card.is-live{border-color:var(--purple-border)}
+.prev-card:hover{transform:translateY(-3px);border-color:var(--purple-border)}
+.prev-card-icon{font-size:26px;margin-bottom:12px}
+.prev-card-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;margin-bottom:5px}
+.prev-card-meta{font-size:11px;color:var(--muted)}
+.home-lb-sec{padding:60px 44px 100px;position:relative;z-index:2;border-top:1px solid var(--border)}
+.home-lb-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:48px}
+.home-lb-text .home-sec-tag{margin-bottom:16px}
+.home-lb-text h3{font-family:'Syne',sans-serif;font-size:clamp(26px,3.5vw,42px);font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:14px}
+.home-lb-text p{font-size:14px;color:var(--muted);max-width:380px;line-height:1.75}
+.home-lb-stats{display:flex;gap:36px;flex-shrink:0}
+.lb-stat-val{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--purple-bright)}
+.lb-stat-lbl{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:3px}
+</style>
+</head>
+<body>
+
+<header id="site-nav">
+  <div class="logo" style="cursor:pointer" onclick="navigate('home')">
+    <img src="Novawalletlogo.png" alt="Nova Wallet" style="height:28px;width:auto;">
+  </div>
+  <div class="nav-links">
+    <button class="nav-link" data-page="import" onclick="navigate('import')">Import Wallets</button>
+    <button class="nav-link" data-page="leaderboard" onclick="navigate('leaderboard')">Leaderboard</button>
+  </div>
+</header>
+
+<div id="page-home" class="page active">
+  <div class="landing">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+    <div id="emoji-bg"></div>
+    <div id="scroll-dark"></div>
+    <div class="landing-center">
+      <div id="logo-anim">
+        <img src="Novawalletlogo.png" alt="Nova Wallet" id="center-logo">
+        <div id="logo-text-wrap">
+          <div id="hero-logo-text">Nova Wallet</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Import Wallets Feature -->
+  <section class="home-sec">
+    <div class="home-sec-inner">
+      <div class="home-sec-tag">Wallet Packs</div>
+      <h2 class="home-sec-h2">Import the wallets<br>that <span class="hl">actually win.</span></h2>
+      <p class="home-sec-sub">One-click import packs for Axiom. KOL Top 50, insiders — all named, ranked, and ready to paste in seconds.</p>
+      <div class="home-pack-preview">
+        <div class="prev-card is-live">
+          <div class="prev-card-icon">🏆</div>
+          <div class="prev-card-name">KOL Top 50</div>
+          <div class="prev-card-meta">50 wallets · Monthly</div>
+        </div>
+        <div class="prev-card is-live">
+          <div class="prev-card-icon">🕵️</div>
+          <div class="prev-card-name">Top Insiders</div>
+          <div class="prev-card-meta">10 wallets · Weekly</div>
+        </div>
+        <div class="prev-card">
+          <div class="prev-card-icon">🎯</div>
+          <div class="prev-card-name">Top Snipers</div>
+          <div class="prev-card-meta">~25 wallets · Soon</div>
+        </div>
+        <div class="prev-card">
+          <div class="prev-card-icon">💬</div>
+          <div class="prev-card-name">Discord Alpha</div>
+          <div class="prev-card-meta">~40 wallets · Soon</div>
+        </div>
+      </div>
+      <button class="home-cta-btn" onclick="navigate('import')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Import Wallets
+      </button>
+    </div>
+  </section>
+
+  <!-- Leaderboard Feature -->
+  <section class="home-lb-sec">
+    <div class="home-lb-inner">
+      <div class="home-lb-text">
+        <div class="home-sec-tag">Leaderboard</div>
+        <h3>Browse all<br>tracked wallets.</h3>
+        <p>Search by name or address. Copy any wallet, view their KOL Scan profile — 50 wallets ranked by monthly performance.</p>
+        <button class="home-cta-btn secondary" style="margin-top:28px" onclick="navigate('leaderboard')">View Leaderboard →</button>
+      </div>
+      <div class="home-lb-stats">
+        <div class="lb-stat"><div class="lb-stat-val">50</div><div class="lb-stat-lbl">Wallets</div></div>
+        <div class="lb-stat"><div class="lb-stat-val">KOL</div><div class="lb-stat-lbl">Source</div></div>
+        <div class="lb-stat"><div class="lb-stat-val">Live</div><div class="lb-stat-lbl">Status</div></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div id="page-import" class="page">
+<div class="section">
+  <div class="sec-hdr">
+    <span class="sec-title">Import Wallets</span>
+    <span class="sec-sub">Copy → Paste into Axiom → Done</span>
+  </div>
+  <div class="packs-grid">
+
+    <!-- PACK 1: KOL Top 50 -->
+    <div class="pack-card live">
+      <div class="pack-top">
+        <div class="pack-icon">🏆</div>
+        <span class="pack-status status-live">LIVE</span>
+      </div>
+      <div class="pack-name">KOL Top 50</div>
+      <p class="pack-desc">The top 50 monthly performers on KOL Scan — real names, ready to import. Updated regularly as the leaderboard shifts.</p>
+      <div class="pack-meta">
+        <div class="pack-meta-item"><div class="meta-val">50</div><div class="meta-lbl">WALLETS</div></div>
+        <div class="pack-meta-item"><div class="meta-val">KOL Scan</div><div class="meta-lbl">SOURCE</div></div>
+        <div class="pack-meta-item"><div class="meta-val">Monthly</div><div class="meta-lbl">UPDATED</div></div>
+      </div>
+      <button class="dl-btn" id="copy-kol50" onclick="copyPack('kol50')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copy to Clipboard
+      </button>
+      <p class="dl-note">Paste straight into Axiom — all 50 wallets imported instantly</p>
+      <button class="view-btn" onclick="openModal('kol50')">View 50 wallets →</button>
+    </div>
+
+    <!-- PACK 2: Top Insiders -->
+    <div class="pack-card live">
+      <div class="pack-top">
+        <div class="pack-icon">🕵️</div>
+        <span class="pack-status status-live">LIVE</span>
+      </div>
+      <div class="pack-name">Top Insiders</div>
+      <p class="pack-desc">Wallets that move before the crowd. Curated from on-chain signals and private intel — not publicly ranked.</p>
+      <div class="pack-meta">
+        <div class="pack-meta-item"><div class="meta-val">10</div><div class="meta-lbl">WALLETS</div></div>
+        <div class="pack-meta-item"><div class="meta-val">Curated</div><div class="meta-lbl">SOURCE</div></div>
+        <div class="pack-meta-item"><div class="meta-val">Weekly</div><div class="meta-lbl">UPDATED</div></div>
+      </div>
+      <button class="dl-btn" id="copy-insiders" onclick="copyPack('insiders')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copy to Clipboard
+      </button>
+      <p class="dl-note">Paste straight into Axiom — all 10 wallets imported instantly</p>
+      <button class="view-btn" onclick="openModal('insiders')">View 10 wallets →</button>
+    </div>
+
+    <!-- PACK 3: Top Snipers -->
+    <div class="pack-card soon">
+      <div class="pack-top">
+        <div class="pack-icon">🎯</div>
+        <span class="pack-status status-soon">SOON</span>
+      </div>
+      <div class="pack-name">Top Snipers</div>
+      <p class="pack-desc">High win rate, low trade count. Wallets that only enter when they're confident — filtered from multiple leaderboards.</p>
+      <div class="pack-meta">
+        <div class="pack-meta-item"><div class="meta-val">~25</div><div class="meta-lbl">WALLETS</div></div>
+        <div class="pack-meta-item"><div class="meta-val">Multi</div><div class="meta-lbl">SOURCE</div></div>
+        <div class="pack-meta-item"><div class="meta-val">Weekly</div><div class="meta-lbl">UPDATED</div></div>
+      </div>
+      <button class="dl-btn disabled">Coming Soon</button>
+    </div>
+
+    <!-- PACK 4: Discord Alpha -->
+    <div class="pack-card soon">
+      <div class="pack-top">
+        <div class="pack-icon">💬</div>
+        <span class="pack-status status-soon">SOON</span>
+      </div>
+      <div class="pack-name">Discord Alpha</div>
+      <p class="pack-desc">Named wallets surfaced from top Solana alpha groups — the ones people keep posting in DMs so you don't have to dig.</p>
+      <div class="pack-meta">
+        <div class="pack-meta-item"><div class="meta-val">~40</div><div class="meta-lbl">WALLETS</div></div>
+        <div class="pack-meta-item"><div class="meta-val">Discord</div><div class="meta-lbl">SOURCE</div></div>
+        <div class="pack-meta-item"><div class="meta-val">Ongoing</div><div class="meta-lbl">UPDATED</div></div>
+      </div>
+      <button class="dl-btn disabled">Coming Soon</button>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="foot-logo">Nova<span>Wallet</span></div>
+  <p>Data from KOL Scan · Not financial advice · DYOR</p>
+  <p>© 2025</p>
+</footer>
+</div>
+
+<div id="page-leaderboard" class="page">
+<div class="section" id="browse">
+  <div class="sec-hdr">
+    <span class="sec-title">Browse Wallets</span>
+    <span class="sec-sub">All wallets across every pack</span>
+  </div>
+  <div class="controls">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="search" type="text" placeholder="Search name or address…">
+    </div>
+    <div class="rcount" id="rcount">50 wallets</div>
+  </div>
+  <div class="col-hdr">
+    <span>#</span><span>Wallet</span><span>Monthly PnL</span><span>Win Rate</span><span></span>
+  </div>
+  <div class="wallets" id="wallet-list"></div>
+</div>
+
+<footer>
+  <div class="foot-logo">Nova<span>Wallet</span></div>
+  <p>Data from KOL Scan · Not financial advice · DYOR</p>
+  <p>© 2025</p>
+</footer>
+</div>
+
+<div class="toast" id="toast">Copied to clipboard</div>
+
+<div class="overlay" id="overlay" onclick="closeModal()"></div>
+<div class="modal" id="modal">
+  <div class="modal-hdr">
+    <div>
+      <div class="modal-title" id="modal-title"></div>
+      <div class="modal-meta" id="modal-meta"></div>
+    </div>
+    <button class="modal-close" onclick="closeModal()">✕</button>
+  </div>
+  <div class="modal-body" id="modal-body"></div>
+  <div class="modal-footer">
+    <button class="dl-btn" id="modal-copy-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+      Copy All to Clipboard
+    </button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+const wallets = [
+  { rank:1,  name:"Nyhrox",           emoji:"🎯", address:"6S8GezkxYUfZy9JPtYnanbcZTMB87Wjt1qx3c6ELajKC", pnl:49178,  wr:50  },
+  { rank:2,  name:"N'o",              emoji:"🔥", address:"Di75xbVUg3u1qcmZci3NcZ8rjFMj7tsnYEoFdEMjS4ow", pnl:27301,  wr:29  },
+  { rank:3,  name:"theo",             emoji:"💎", address:"Bi4rd5FH5bYEN8scZ7wevxNZyNmKHdaBcvewdPFxYdLt", pnl:24663,  wr:40  },
+  { rank:4,  name:"Jijo",             emoji:"🚀", address:"4BdKaxN8G6ka4GYtQQWk4G4dZRUTX2vQH9GcXdBREFUk", pnl:22587,  wr:85  },
+  { rank:5,  name:"Cented",           emoji:"⚡", address:"CyaE1VxvBrahnPWkqm5VsdCvyS2QmNht2UFrKJHga54o", pnl:17274,  wr:52  },
+  { rank:6,  name:"Dani",             emoji:"🌊", address:"AuPp4YTMTyqxYXQnHc5KUc6pUuCSsHQpBJhgnD45yqrf", pnl:16504,  wr:44  },
+  { rank:7,  name:"Nach",             emoji:"🐉", address:"9jyqFiLnruggwNn4EQwBNFXwpbLM9hrA4hV59ytyAVVz", pnl:12556,  wr:45  },
+  { rank:8,  name:"clukz",            emoji:"🦅", address:"G6fUXjMKPJzCY1rveAE6Qm7wy5U3vZgKDJmN1VPAdiZC", pnl:11461,  wr:55  },
+  { rank:9,  name:"Trench Guerilla",  emoji:"🪖", address:"9St6ETbe3CFitw6UNSd8kg7kZ6STXy71wEGiERqQj89U", pnl:11450,  wr:80  },
+  { rank:10, name:"Doji",             emoji:"📊", address:"5ZuV8eqkvzYFVEKbLvGBdexL2tFv7E5BCd2HZpjqbdg",  pnl:9590,   wr:76  },
+  { rank:11, name:"Letterbomb",       emoji:"💣", address:"BtMBMPkoNbnLF9Xn552guQq528KKXcsNBNNBre3oaQtr", pnl:null, wr:null },
+  { rank:12, name:"Domy",             emoji:"🏆", address:"3LUfv2u5yzsDtUzPdsSJ7ygPBuqwfycMkjpNreRR2Yww", pnl:null, wr:null },
+  { rank:13, name:"Daumen",           emoji:"👍", address:"8MaVa9kdt3NW4Q5HyNAm1X5LbR8PQRVDc1W8NMVK88D5", pnl:null, wr:null },
+  { rank:14, name:"Kadenox",          emoji:"🌙", address:"B32QbbdDAyhvUQzjcaM5j6ZVKwjCxAwGH5Xgvb9SJqnC", pnl:null, wr:null },
+  { rank:15, name:"noob mini",        emoji:"🐣", address:"AGqjivJr1dSv73TVUvdtqAwogzmThzvYMVXjGWg2FYLm",  pnl:null, wr:null },
+  { rank:16, name:"Cupsey",           emoji:"☕", address:"2fg5QD1eD7rzNNCsvnhmXFm5hqNgwTTG8p7kQ6f3rx6f",  pnl:null, wr:null },
+  { rank:17, name:"Ethan Prosper",    emoji:"💰", address:"sAdNbe1cKNMDqDsa4npB3TfL62T14uAo2MsUQfLvzLT",  pnl:null, wr:null },
+  { rank:18, name:"Fox",              emoji:"🦊", address:"DAEdBmTPEKM6xkwfzC3d411QUe6coKpkND6UURa4CvHC", pnl:null, wr:null },
+  { rank:19, name:"prettyover",       emoji:"🎭", address:"2e1w3Xo441Ytvwn54wCn8itAXwCKbiizc9ynGEv14Vis",  pnl:null, wr:null },
+  { rank:20, name:"Degenerate Brian", emoji:"🎰", address:"7pDhG6NqfzQzw5KvtGXJbVRUh4iTBgYAn68BSKjdMNC1", pnl:null, wr:null },
+  { rank:21, name:"rambo",            emoji:"🏹", address:"2net6etAtTe3Rbq2gKECmQwnzcKVXRaLcHy2Zy1iCiWz",  pnl:null, wr:null },
+  { rank:22, name:"Chairman",         emoji:"👑", address:"Be24Gbf5KisDk1LcWWZsBn8dvB816By7YzYF5zWZnRR6", pnl:null, wr:null },
+  { rank:23, name:"dov 7",            emoji:"7️⃣", address:"8nqtxpFpuXwfXG4pBLsDkkuMMPK9FjSkBMCn542HiM3v",  pnl:null, wr:null },
+  { rank:24, name:"Sheep",            emoji:"🐑", address:"78N177fzNJpp8pG49xDv1efYcTMSzo9tPTKEA9mAVkh2",  pnl:null, wr:null },
+  { rank:25, name:"Clown",            emoji:"🤡", address:"EDXHdSFdadFbYFFjxPXBqMe1kCEDFqpPu552uvp48HR8",  pnl:null, wr:null },
+  { rank:26, name:"decu",             emoji:"🎲", address:"4vw54BmAogeRV3vPKWyFet5yf8DTLcREzdSzx4rw9Ud9",  pnl:null, wr:null },
+  { rank:27, name:"BIGWARZ",          emoji:"💥", address:"7bsTkeWcSPG6nzsbXucxV89YUULoSExNJdX2WqfLHwZ4",  pnl:null, wr:null },
+  { rank:28, name:"radiance",         emoji:"✨", address:"FAicXNV5FVqtfbpn4Zccs71XcfGeyxBSGbqLDyDJZjke",  pnl:null, wr:null },
+  { rank:29, name:"TIL",              emoji:"📚", address:"EHg5YkU2SZBTvuT87rUsvxArGp3HLeye1fXaSDfuMyaf",  pnl:null, wr:null },
+  { rank:30, name:"Naruza",           emoji:"🌀", address:"ASVzakePP6GNg9r95d4LPZHJDMXun6L6E4um4pu5ybJk",  pnl:null, wr:null },
+  { rank:31, name:"Yenni",            emoji:"🌸", address:"5B52w1ZW9tuwUduueP5J7HXz5AcGfruGoX6YoAudvyxG",  pnl:null, wr:null },
+  { rank:32, name:"Qavec",            emoji:"🔮", address:"gangJEP5geDHjPVRhDS5dTF5e6GtRvtNogMEEVs91RV",   pnl:null, wr:null },
+  { rank:33, name:"Schoen",           emoji:"🎨", address:"5hAgYC8TJCcEZV7LTXAzkTrm7YL29YXyQQJPCNrG84zM",  pnl:null, wr:null },
+  { rank:34, name:"Megga",            emoji:"🔱", address:"H31vEBxSJk1nQdUN11qZgZyhScyShhscKhvhZZU3dQoU",  pnl:null, wr:null },
+  { rank:35, name:"Loopierr",         emoji:"🔄", address:"9yYya3F5EJoLnBNKW6z4bZvyQytMXzDcpU5D6yYr4jqL",  pnl:null, wr:null },
+  { rank:36, name:"Trey",             emoji:"3️⃣", address:"831yhv67QpKqLBJjbmw2xoDUeeFHGUx8RnuRj9imeoEs",  pnl:null, wr:null },
+  { rank:37, name:"Dior",             emoji:"👔", address:"87rRdssFiTJKY4MGARa4G5vQ31hmR7MxSmhzeaJ5AAxJ",  pnl:null, wr:null },
+  { rank:38, name:"Gfree",            emoji:"🆓", address:"4yo9CUuTBbds9NFhZd4MzPiZZkUvveXdTnAH8qMsE8ku",  pnl:null, wr:null },
+  { rank:39, name:"cuban",            emoji:"🌴", address:"EcVgevcb8F3QsHuBg96wrCXwC3j2gnrhLr1Q21YULNk8",  pnl:null, wr:null },
+  { rank:40, name:"cryptovillain26",  emoji:"😈", address:"5sNnKuWKUtZkdC1eFNyqz3XHpNoCRQ1D1DfHcNHMV7gn",  pnl:null, wr:null },
+  { rank:41, name:"The Doc",          emoji:"🩺", address:"DYAn4XpAkN5mhiXkRB7dGq4Jadnx6XYgu8L5b3WGhbrt",  pnl:null, wr:null },
+  { rank:42, name:"matsu",            emoji:"🍵", address:"9f5ywdCDA4QhSktBomozpHmZfSLqS6J9VqCrRehYWh1p",  pnl:null, wr:null },
+  { rank:43, name:"Stacker",          emoji:"✝️", address:"HbCxe8yWQJWnK3f3FX4oohgm87FZuPYD4Ydszqxgkwft",  pnl:null, wr:null },
+  { rank:44, name:"MACXBT",           emoji:"🟡", address:"ETU3GyrUsv6UztQJxHgsBX2UoJFmq79WJe3JyDpAqGMz",  pnl:null, wr:null },
+  { rank:45, name:"Matt",             emoji:"🤝", address:"3bzaJd5yZG73EVDz8xosQb7gfZm2LN5auFGh6wnP1n1f",  pnl:null, wr:null },
+  { rank:46, name:"Setora",           emoji:"🌟", address:"HTVupcGHvA8tXX5pHmmAxQ8eiFAJSJhYNQjer3zycLcU",  pnl:null, wr:null },
+  { rank:47, name:"Pavlo",            emoji:"🎯", address:"7NnaXghjuU92gM9kmwXysqa5HboyZuR2LTaBnvazFxSH",  pnl:null, wr:null },
+  { rank:48, name:"storm",            emoji:"⛈️", address:"Dxudj2DQ5odnqgZvUocaeWc1eYC78Q8vfmVtPpvTrRNh",  pnl:null, wr:null },
+  { rank:49, name:"tech",             emoji:"💻", address:"5d3jQcuUvsuHyZkhdp78FFqc7WogrzZpTtec1X9VNkuE",  pnl:null, wr:null },
+  { rank:50, name:"anon",             emoji:"⚫", address:"13gj9sYDkj42PsC7koDk2cR9mj2YpVQxWvSBLcJcLkzG",  pnl:null, wr:null },
+];
+
+const insiderWallets = [
+  { rank:1,  name:"Insider 1",  emoji:"👻", address:"6u9jyRaT1UEWeZR7CLe9CZ5NgX96n1Txmu9Thb9nHmy5", pnl:null, wr:null },
+  { rank:2,  name:"Insider 2",  emoji:"👻", address:"CxLqd89BRrFBSvfxiFmTDgx3yRCoWvxbKLFvoeiBLwU1",  pnl:null, wr:null },
+  { rank:3,  name:"Insider 3",  emoji:"👻", address:"FZU5bqYanpBuBzGDHshQL9rZb8PYS45tyP9q44eQpGsK",  pnl:null, wr:null },
+  { rank:4,  name:"Insider 4",  emoji:"👻", address:"EFiU8yVYiBXcmCa1Bjajsx9xbFh6SKWPPPpAxHvTdTS1",  pnl:null, wr:null },
+  { rank:5,  name:"Insider 5",  emoji:"👻", address:"j1oxqtEHFn7rUkdABJLmtVtz5fFmHFs4tCG3fWJnkHX",   pnl:null, wr:null },
+  { rank:6,  name:"Insider 6",  emoji:"👻", address:"H8TwcaNT1SreR6PTXD6UY9LKn4TzaiRkhrPgj2NDqQ6J",  pnl:null, wr:null },
+  { rank:7,  name:"Insider 7",  emoji:"👻", address:"J1nQS7RXVSRij4S5AUdhFYYwwWxT1fdBtmJQvSfhywic",  pnl:null, wr:null },
+  { rank:8,  name:"Insider 8",  emoji:"👻", address:"5u1aGEt6ekvQuu4ygE4GZx1TAGkBEk93aaDqNgEgg7yZ",  pnl:null, wr:null },
+  { rank:9,  name:"Insider 9",  emoji:"👻", address:"DD2qxJP24AEemDevYYLw4y7z6yPWCtG3oC8cGJ5x4pif",  pnl:null, wr:null },
+  { rank:10, name:"Insider 10", emoji:"👻", address:"498g1rVnFcnjBjpfw1xyqA1WvgQXUU8RWuELjxkjAayQ",  pnl:null, wr:null },
+];
+
+const packs = {
+  kol50: {
+    groupName: "KOL Top 50",
+    wallets: wallets
+  },
+  insiders: {
+    groupName: "Insiders",
+    wallets: insiderWallets
+  }
+};
+
+function writeClipboard(text, onSuccess) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(onSuccess).catch(() => fallbackCopy(text, onSuccess));
+  } else {
+    fallbackCopy(text, onSuccess);
+  }
+}
+
+function fallbackCopy(text, onSuccess) {
+  const el = document.createElement('textarea');
+  el.value = text;
+  el.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+  document.body.appendChild(el);
+  el.focus();
+  el.select();
+  try { document.execCommand('copy'); onSuccess(); } catch(e) {}
+  document.body.removeChild(el);
+}
+
+function copyPack(packId, btnOverride) {
+  const pack = packs[packId];
+  const now = new Date().toISOString();
+  const data = pack.wallets.map(w => ({
+    trackedWalletAddress: w.address,
+    name: w.name,
+    emoji: w.emoji,
+    createdAt: now,
+    alertsOnToast: true,
+    alertsOnBubble: true,
+    alertsOnFeed: true,
+    groupNames: [pack.groupName],
+    sound: ""
+  }));
+  writeClipboard(JSON.stringify(data), () => {
+    const btn = btnOverride || document.getElementById('copy-' + packId);
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+    btn.style.background = 'var(--green)';
+    setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; }, 2000);
+    showToast(pack.wallets.length + ' wallets copied — paste into Axiom');
+  });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function copyAddr(addr) {
+  writeClipboard(addr, () => showToast('Address copied'));
+}
+
+function importSingle(address, name, emoji, groupName) {
+  const data = [{
+    trackedWalletAddress: address,
+    name: name,
+    emoji: emoji,
+    createdAt: new Date().toISOString(),
+    alertsOnToast: true,
+    alertsOnBubble: true,
+    alertsOnFeed: true,
+    groupNames: [groupName],
+    sound: ""
+  }];
+  writeClipboard(JSON.stringify(data), () => showToast(name + ' copied — paste into Axiom'));
+}
+
+function fmt(addr) { return addr.slice(0,5) + '...' + addr.slice(-4); }
+
+function render(data) {
+  document.getElementById('rcount').textContent = data.length + ' wallet' + (data.length !== 1 ? 's' : '');
+  document.getElementById('wallet-list').innerHTML = data.map(w => `
+    <div class="wrow">
+      <div class="wrank ${w.rank <= 3 ? 'top' : ''}">${w.rank}</div>
+      <div class="winfo">
+        <div class="wname">${w.emoji} ${w.name}</div>
+        <div class="waddr-row">
+          <span class="waddr">${fmt(w.address)}</span>
+          <button class="cbtn" onclick="copyAddr('${w.address}')" title="Copy address">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke="currentColor"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="wpnl ${w.pnl === null ? 'na' : w.pnl >= 0 ? 'pos' : 'neg'}">${w.pnl === null ? '—' : (w.pnl >= 0 ? '+' : '') + '$' + w.pnl.toLocaleString()}</div>
+      <div class="wwr ${w.wr === null ? 'na' : ''}">${w.wr === null ? '—' : w.wr + '%'}</div>
+      <div class="wactions">
+        <a class="abtn" href="https://kolscan.io/account/${w.address}" target="_blank">KOL Scan ↗</a>
+        <button class="abtn" onclick="copyAddr('${w.address}')">Copy</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+document.getElementById('search').addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  render(q ? wallets.filter(w => w.name.toLowerCase().includes(q) || w.address.toLowerCase().includes(q)) : wallets);
+});
+
+render(wallets);
+
+function openModal(packId) {
+  const pack = packs[packId];
+  document.getElementById('modal-title').textContent = pack.groupName;
+  document.getElementById('modal-meta').textContent = pack.wallets.length + ' wallets · KOL Scan monthly';
+  document.getElementById('modal-body').innerHTML = pack.wallets.map(w => `
+    <div class="mrow">
+      <div class="mrank ${w.rank <= 3 ? 'top' : ''}">${w.rank}</div>
+      <div class="memoji">${w.emoji}</div>
+      <div class="minfo">
+        <div class="mname">${w.name}</div>
+        <div class="maddr">${fmt(w.address)}</div>
+      </div>
+      <button class="mcopy" onclick="importSingle('${w.address}','${w.name.replace(/'/g,"\\'")}','${w.emoji}','${pack.groupName}')">Import</button>
+    </div>
+  `).join('');
+  const copyBtn = document.getElementById('modal-copy-btn');
+  copyBtn.onclick = () => copyPack(packId, copyBtn);
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// Hero intro
+(function() {
+  const textWrap = document.getElementById('logo-text-wrap');
+  const logoText = document.getElementById('hero-logo-text');
+  const targetW  = textWrap.offsetWidth;
+
+  gsap.set('#center-logo', { opacity: 1 });
+  gsap.set(textWrap, { width: 0 });
+  gsap.set(logoText, { x: -targetW });
+
+  gsap.timeline({ delay: 1.6 })
+    .to(textWrap, { width: targetW, duration: 0.7, ease: 'power3.inOut' })
+    .to(logoText, { x: 0,          duration: 0.7, ease: 'power3.inOut' }, '<');
+})();
+
+// Emoji background
+(function() {
+  const bg = document.getElementById('emoji-bg');
+  const pool = [
+    // wallet emojis
+    ...wallets.map(w => w.emoji),
+    // crypto / money / finance
+    '💸','💵','💴','💶','💷','💰','💳','🏦','💹','📈','📉','💲','🤑','🪙','💎','👛','👜','💼','🏧','🤝','📊','🔑','⛓️','🌐','💻','📱','🖥️','⌨️','🖱️',
+    // vibes / misc
+    '👾','🎮','🏄','🌊','⚡','🔥','🚀','🌙','✨','🃏','🎯','🧠','👁️','🌀','💫','🎲','🏹','👑','🛸','⚔️','🧬','🔮','🌟','🎪','🎭','🎨','🎬','🎤','🎧','🎸','🥊','🏆','🥇','🎰','🎱',
+    // animals — birds
+    '🦅','🦆','🦉','🦚','🦜','🦩','🦢','🕊️','🦤','🐦','🐧','🦃','🐓','🪶',
+    // animals — sea
+    '🦑','🐙','🦐','🦞','🦀','🐡','🐠','🐟','🐬','🐳','🐋','🦈','🦭','🐸',
+    // animals — reptiles / dinos
+    '🦎','🐍','🐢','🦕','🦖','🐊','🐉','🐲',
+    // animals — bugs
+    '🦋','🐝','🐛','🦗','🐜','🐞','🦟','🦔',
+    // animals — big / wild
+    '🦁','🐯','🐆','🐅','🦓','🦍','🦧','🦣','🐘','🦛','🦏','🐺','🦊','🐻','🐼','🐨','🦒','🦬','🐪','🐫',
+    // animals — small / cute
+    '🐰','🐹','🐭','🐱','🐶','🐮','🐷','🐑','🐏','🦙','🐐','🦌','🐕','🐩','🐈','🐇','🦝','🦨','🦡','🦫','🦦','🦥','🐿️','🙈','🙉','🙊',
+  ];
+  const COUNT = 48;
+  const FADE = 55;
+  const particles = [];
+  let mx = 0, my = 0, cx = 0, cy = 0;
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+  function randEmoji() { return pool[Math.floor(Math.random() * pool.length)]; }
+
+  function spawn(p, initial) {
+    p.emoji  = randEmoji();
+    p.size   = rand(16, 54);
+    p.depth  = rand(0.2, 1.8);
+    p.maxOp  = rand(0.04, 0.13);
+    p.life   = 0;
+    p.maxLife = rand(400, 800) | 0;
+
+    const speed = rand(0.02, 0.056);
+    const edge  = initial ? Math.floor(rand(0, 4)) : Math.floor(rand(0, 4));
+
+    if (edge === 0) {          // bottom → up
+      p.x = rand(-5, 105); p.y = rand(102, 114);
+      p.vx = rand(-0.04, 0.04); p.vy = -speed;
+    } else if (edge === 1) {   // top → down
+      p.x = rand(-5, 105); p.y = rand(-14, -4);
+      p.vx = rand(-0.04, 0.04); p.vy = speed;
+    } else if (edge === 2) {   // left → right
+      p.x = rand(-14, -4); p.y = rand(-5, 105);
+      p.vx = speed; p.vy = rand(-0.04, 0.04);
+    } else {                   // right → left
+      p.x = rand(104, 114); p.y = rand(-5, 105);
+      p.vx = -speed; p.vy = rand(-0.04, 0.04);
+    }
+
+    if (initial) {
+      if (Math.random() < 0.68) {
+        const e = Math.floor(rand(0,4));
+        if (e===0){p.x=rand(-5,105);p.y=rand(80,108);}
+        else if(e===1){p.x=rand(-5,105);p.y=rand(-8,18);}
+        else if(e===2){p.x=rand(-8,18);p.y=rand(-5,105);}
+        else{p.x=rand(82,108);p.y=rand(-5,105);}
+      } else {
+        p.x=rand(-5,105);p.y=rand(-5,105);
+      }
+    }
+
+    p.el.textContent = p.emoji;
+    p.el.style.fontSize = p.size + 'px';
+    p.el.style.filter = p.depth < 0.7 ? 'blur(1px)' : 'none';
+  }
+
+  for (let i = 0; i < COUNT; i++) {
+    const el = document.createElement('div');
+    el.className = 'be';
+    bg.appendChild(el);
+    const p = { el, x:0, y:0, vx:0, vy:0, life:0, maxLife:1, depth:1, size:24, maxOp:0.5, emoji:'' };
+    spawn(p, true);
+    particles.push(p);
+  }
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX / window.innerWidth - 0.5;
+    my = e.clientY / window.innerHeight - 0.5;
+  });
+
+  function tick() {
+    cx += (mx - cx) * 0.055;
+    cy += (my - cy) * 0.055;
+
+    particles.forEach(p => {
+      p.life++;
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.life >= p.maxLife || p.y < -15 || p.y > 115 || p.x < -15 || p.x > 115) { spawn(p, false); return; }
+
+      let op;
+      if (p.life < FADE) op = (p.life / FADE) * p.maxOp;
+      else if (p.life > p.maxLife - FADE) op = ((p.maxLife - p.life) / FADE) * p.maxOp;
+      else op = p.maxOp;
+
+      p.el.style.left      = p.x + '%';
+      p.el.style.top       = p.y + '%';
+      p.el.style.opacity   = op;
+      p.el.style.transform = `translate(${cx * p.depth * 45}px,${cy * p.depth * 35}px)`;
+    });
+
+    requestAnimationFrame(tick);
+  }
+  tick();
+
+  window.addEventListener('scroll', () => {
+    if (!document.getElementById('page-home').classList.contains('active')) return;
+    const progress = Math.min(1, window.scrollY / window.innerHeight);
+    bg.style.opacity = Math.max(0, 1 - progress * 2);
+    document.getElementById('scroll-dark').style.opacity = progress * 0.82;
+    const navAlpha = 0.08 + progress * 0.84;
+    const borderAlpha = 0.28 - progress * 0.16;
+    document.getElementById('site-nav').style.background = `rgba(8,8,8,${navAlpha.toFixed(2)})`;
+    document.getElementById('site-nav').style.borderColor = `rgba(155,140,255,${borderAlpha.toFixed(2)})`;
+  });
+})();
+
+// Nav ribbon entrance
+gsap.from('#site-nav', { y: -58, opacity: 0, duration: 0.9, ease: 'power2.out', delay: 1.6 });
+
+// Blob floating
+gsap.to('.b1', { x: 70,  y: 50,  scale: 1.1,  duration: 9,  ease: 'sine.inOut', repeat: -1, yoyo: true });
+gsap.to('.b2', { x: -55, y: -40, scale: 1.07, duration: 11, ease: 'sine.inOut', repeat: -1, yoyo: true, delay: 1.5 });
+gsap.to('.b3', { x: 35,  y: 55,  scale: 1.12, duration: 8,  ease: 'sine.inOut', repeat: -1, yoyo: true, delay: 3 });
+
+// Home page scroll animations
+gsap.registerPlugin(ScrollTrigger);
+gsap.from('.home-sec .home-sec-tag, .home-sec .home-sec-h2, .home-sec .home-sec-sub', {
+  scrollTrigger: { trigger: '.home-sec', start: 'top 82%' },
+  y: 30, opacity: 0, duration: 0.7, ease: 'power2.out', stagger: 0.12
+});
+gsap.from('.prev-card', {
+  scrollTrigger: { trigger: '.home-pack-preview', start: 'top 85%' },
+  y: 28, opacity: 0, duration: 0.55, ease: 'power2.out', stagger: 0.09
+});
+gsap.from('.home-sec .home-cta-btn', {
+  scrollTrigger: { trigger: '.home-sec .home-cta-btn', start: 'top 90%' },
+  y: 16, opacity: 0, duration: 0.5, ease: 'power2.out'
+});
+gsap.from('.home-lb-text > *', {
+  scrollTrigger: { trigger: '.home-lb-sec', start: 'top 85%' },
+  y: 24, opacity: 0, duration: 0.6, ease: 'power2.out', stagger: 0.1
+});
+gsap.from('.home-lb-stats .lb-stat', {
+  scrollTrigger: { trigger: '.home-lb-sec', start: 'top 85%' },
+  y: 24, opacity: 0, duration: 0.6, ease: 'power2.out', stagger: 0.12, delay: 0.2
+});
+
+// Page routing
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  window.scrollTo(0, 0);
+
+  const nav = document.getElementById('site-nav');
+  if (page === 'home') {
+    nav.style.background = 'rgba(110,70,200,0.08)';
+    nav.style.borderColor = 'rgba(155,140,255,0.28)';
+  } else {
+    nav.style.background = 'rgba(8,8,8,0.92)';
+    nav.style.borderColor = 'rgba(155,140,255,0.12)';
+    gsap.from('#page-' + page, { opacity: 0, y: 18, duration: 0.45, ease: 'power2.out' });
+    if (page === 'import') {
+      gsap.from('.pack-card', { y: 36, opacity: 0, duration: 0.55, ease: 'power2.out', stagger: 0.09, delay: 0.1 });
+      gsap.from('.sec-hdr', { x: -20, opacity: 0, duration: 0.5, ease: 'power2.out', delay: 0.05 });
+    }
+    if (page === 'leaderboard') {
+      gsap.from('.wrow', { y: 14, opacity: 0, duration: 0.35, ease: 'power2.out', stagger: 0.018, delay: 0.1 });
+      gsap.from('#browse .sec-hdr', { x: -20, opacity: 0, duration: 0.5, ease: 'power2.out', delay: 0.05 });
+    }
+  }
+
+  document.querySelectorAll('#site-nav .nav-link').forEach(b => b.classList.remove('active'));
+  const activeBtn = document.querySelector(`#site-nav [data-page="${page}"]`);
+  if (activeBtn) activeBtn.classList.add('active');
+}
+
+</script>
+</body>
+</html>
