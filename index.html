@@ -25,11 +25,6 @@
     .ribbon-x-link{display:flex;align-items:center;color:#ffffff;text-decoration:none;transition:transform 0.2s ease,filter 0.2s ease;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(255,255,255,0.9));}
     .ribbon-x-link:hover{transform:scale(1.35);filter:drop-shadow(0 0 10px #ffffff);}
     .ribbon-x-icon{width:18px;height:18px;fill:#ffffff;}
-    .ribbon-buy-btn{display:inline-flex;align-items:center;font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:3px;text-transform:uppercase;text-decoration:none;padding:0.3rem 1rem;background:#ffffff;color:#000000;border-radius:50px;position:relative;overflow:hidden;transition:color 0.3s,box-shadow 0.3s;cursor:none;flex-shrink:0;}
-    .ribbon-buy-btn::before{content:'';position:absolute;inset:0;background:#000000;transform:scaleX(0);transform-origin:right;transition:transform 0.3s ease;z-index:0;border-radius:50px;}
-    .ribbon-buy-btn:hover::before{transform:scaleX(1);}
-    .ribbon-buy-btn:hover{color:#ffffff;box-shadow:0 0 18px rgba(255,255,255,0.15);}
-    .ribbon-buy-btn span{position:relative;z-index:1;}
     .ribbon-center{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:0.6rem;white-space:nowrap;}
     .r-ca-label{font-family:'Share Tech Mono',monospace;font-size:0.65rem;letter-spacing:3px;color:rgba(255,255,255,0.5);text-transform:uppercase;}
     .r-ca-val{font-family:'Share Tech Mono',monospace;font-size:1rem;letter-spacing:3px;color:#ffffff;font-weight:700;cursor:pointer;transition:color 0.2s,transform 0.2s,text-shadow 0.2s;text-shadow:0 0 8px rgba(255,255,255,0.6);display:inline-block;}
@@ -46,7 +41,6 @@
     .corner-tr{top:8%;right:5%;border-width:2px 2px 0 0;}
     .corner-bl{bottom:8%;left:5%;border-width:0 0 2px 2px;}
     .corner-br{bottom:8%;right:5%;border-width:0 2px 2px 0;}
-    /* CCTV HUD */
     .cctv-hud{position:absolute;inset:0;pointer-events:none;z-index:20;}
     .hud-tl{position:absolute;top:calc(8% + 8px);left:calc(5% + 8px);display:flex;align-items:center;gap:0.55rem;}
     .hud-tr{position:absolute;top:calc(8% + 8px);right:calc(5% + 8px);text-align:right;}
@@ -61,68 +55,84 @@
     .cam-grain{position:absolute;inset:0;pointer-events:none;z-index:15;opacity:1;}
     .ch-h{position:absolute;top:50%;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.03),transparent);}
     .ch-v{position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,rgba(255,255,255,0.03),transparent);}
-   .eye-wrap{position:relative;width:min(85vw,700px);height:min(85vw,700px);}
+    .eye-wrap{position:relative;width:min(85vw,700px);height:min(85vw,700px);}
     .eye-glow-ring{position:absolute;inset:-20px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(200,200,200,0.04) 0%,transparent 65%);animation:gPulse 4s ease-in-out infinite;}
     @keyframes gPulse{0%,100%{opacity:0.3;}50%{opacity:1;}}
     .eye-img{width:100%;height:100%;object-fit:contain;animation:ePulse 5s ease-in-out infinite;}
     @keyframes ePulse{0%,100%{transform:scale(1);}50%{transform:scale(1.025);}}
-    .scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.4rem;}
+    .scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.4rem;z-index:25;}
     .scroll-hint span{font-size:0.75rem;letter-spacing:5px;text-transform:uppercase;color:#ffffff;}
     .s-line{width:1px;height:28px;background:linear-gradient(180deg,transparent,var(--dim));overflow:hidden;position:relative;}
     .s-line::after{content:'';position:absolute;top:-100%;left:0;width:100%;height:100%;background:var(--white);animation:sDrop 2s ease-in-out infinite;}
     @keyframes sDrop{0%{top:-100%;}100%{top:100%;}}
+    .eye-bottom-fade{position:absolute;bottom:0;left:0;right:0;height:220px;background:linear-gradient(to bottom,transparent,var(--dark));pointer-events:none;z-index:22;}
+
+    /* SECTION DIVIDER */
+    .section-divider{display:flex;align-items:center;gap:2rem;padding:1.25rem 2rem;background:var(--dark);}
+    .divider-line{flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(255,51,0,0.3),transparent);}
+    .divider-text{font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:5px;color:rgba(255,51,0,0.55);white-space:nowrap;text-transform:uppercase;}
 
     /* CONTENT SECTION */
-    #content{background:var(--dark);border-top:1px solid var(--border);padding:6rem 2rem 5rem;}
+    #content{background:var(--dark);padding:4rem 2rem 5rem;}
     .inner{max-width:860px;margin:0 auto;}
 
     /* SLOGAN */
     .slogan{text-align:center;margin-bottom:5rem;}
-    .slogan h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,8vw,6.5rem);letter-spacing:5px;color:var(--white);line-height:1;margin-bottom:0.6rem;}
+    .slogan h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,8vw,6.5rem);letter-spacing:5px;color:var(--white);line-height:1;margin-bottom:0.6rem;text-shadow:0 0 60px rgba(255,255,255,0.06);}
     .slogan-ticker{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:8px;color:rgba(255,255,255,0.45);margin-bottom:2rem;text-transform:uppercase;}
-    .slogan-warning{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:5px;text-transform:uppercase;color:rgba(255,255,255,0.75);border:1px solid rgba(255,255,255,0.15);display:inline-block;padding:0.6rem 1.75rem;box-shadow:0 0 20px rgba(255,255,255,0.04);}
+    .slogan-warning{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:5px;text-transform:uppercase;color:rgba(255,255,255,0.75);border:1px solid rgba(255,51,0,0.2);border-left:2px solid rgba(255,51,0,0.5);display:inline-block;padding:0.6rem 1.75rem;background:rgba(204,34,0,0.04);}
     .slogan-warning .warn-icon{color:#f5c518;}
 
-    /* CTA ROW */
-    .cta-row{display:flex;flex-direction:row;justify-content:center;align-items:center;gap:1rem;margin-bottom:5rem;flex-wrap:wrap;}
-    .btn-buy,.btn-x{display:inline-flex;align-items:center;justify-content:center;gap:0.75rem;font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:5px;text-transform:uppercase;text-decoration:none;padding:1.1rem 3.5rem;background:#ffffff;color:#000000;border:none;border-radius:50px;position:relative;overflow:hidden;transition:color 0.35s,box-shadow 0.35s,transform 0.2s;cursor:none;width:fit-content;}
-    .btn-buy::before,.btn-x::before{content:'';position:absolute;inset:0;background:#000000;transform:scaleX(0);transform-origin:right;transition:transform 0.35s ease;z-index:0;border-radius:50px;}
-    .btn-buy:hover::before,.btn-x:hover::before{transform:scaleX(1);transform-origin:right;}
-    .btn-buy:hover,.btn-x:hover{color:#ffffff;box-shadow:0 0 35px rgba(255,255,255,0.18);transform:translateY(-3px);}
-    .btn-buy span,.btn-x span{position:relative;z-index:1;}
-    .x-icon{width:22px;height:22px;fill:currentColor;flex-shrink:0;position:relative;z-index:1;}
+    /* CTA */
+    .cta-row{display:flex;flex-direction:column;align-items:center;gap:1.25rem;margin-bottom:5rem;}
+    .cta-hero{display:flex;justify-content:center;}
+    .cta-secondary{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+    .btn-buy{display:inline-flex;align-items:center;justify-content:center;gap:0.75rem;font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:5px;text-transform:uppercase;text-decoration:none;padding:1.1rem 3.5rem;background:#ffffff;color:#000000;border:none;border-radius:50px;position:relative;overflow:hidden;transition:color 0.35s,box-shadow 0.35s,transform 0.2s;cursor:none;width:fit-content;}
+    .btn-buy::before{content:'';position:absolute;inset:0;background:#cc2200;transform:scaleX(0);transform-origin:right;transition:transform 0.35s ease;z-index:0;border-radius:50px;}
+    .btn-buy:hover::before{transform:scaleX(1);}
+    .btn-buy:hover{color:#ffffff;box-shadow:0 0 40px rgba(255,51,0,0.35);transform:translateY(-3px);}
+    .btn-buy span{position:relative;z-index:1;}
+    .btn-sec{display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:4px;text-transform:uppercase;text-decoration:none;padding:0.7rem 2rem;background:transparent;color:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.2);border-radius:50px;transition:color 0.3s,border-color 0.3s,box-shadow 0.3s,transform 0.2s;cursor:none;}
+    .btn-sec:hover{color:#ffffff;border-color:rgba(255,255,255,0.55);box-shadow:0 0 18px rgba(255,255,255,0.07);transform:translateY(-2px);}
+    .x-icon-sm{width:15px;height:15px;fill:currentColor;flex-shrink:0;}
 
     /* STATS */
-    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:5rem;border-radius:12px;overflow:hidden;}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:5rem;border-radius:0;overflow:hidden;}
     .sbox{background:var(--dark);padding:1.75rem 1.5rem;}
-    .sbox-label{font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:0.5rem;}
+    .sbox-alert{background:rgba(204,34,0,0.03);border-left:2px solid rgba(255,51,0,0.25);}
+    .sbox-label{font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:0.5rem;}
     .sbox-val{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:2px;color:#ffffff;line-height:1;}
-    .sbox-val.alert{color:var(--red-glow);}
-    .sbox-sub{font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-top:0.3rem;}
+    .sbox-val.alert{color:var(--red-glow);text-shadow:0 0 20px rgba(255,51,0,0.45);}
+    .sbox-sub{font-family:'Share Tech Mono',monospace;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-top:0.4rem;}
 
     /* TRACKER */
-    .tracker{margin-bottom:4rem;border:1px solid rgba(255,255,255,0.15);padding:2rem;box-shadow:0 0 30px rgba(255,255,255,0.04);border-radius:12px;}
-    .tracker-head{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:6px;text-transform:uppercase;color:var(--white);margin-bottom:1.5rem;display:flex;align-items:center;gap:0.75rem;}
-    .tracker-head::before{content:'';display:inline-block;width:16px;height:2px;background:var(--white);}
+    .tracker{margin-bottom:4rem;border:1px solid rgba(255,51,0,0.15);box-shadow:0 0 40px rgba(255,51,0,0.04);border-radius:0;}
+    .tracker-head{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:5px;text-transform:uppercase;color:var(--white);padding:1.1rem 1.75rem;border-bottom:1px solid rgba(255,51,0,0.12);background:rgba(255,51,0,0.03);display:flex;align-items:center;justify-content:space-between;}
+    .tracker-live{display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;letter-spacing:3px;color:var(--red-glow);}
+    .tracker-live-dot{width:7px;height:7px;background:var(--red-glow);border-radius:50%;box-shadow:0 0 6px var(--red-glow);animation:recBlink 1.8s ease-in-out infinite;flex-shrink:0;}
+    .tracker-title{font-size:1.3rem;}
+    .tracker-meta{font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:3px;color:rgba(255,255,255,0.25);}
+    #tracker-out{padding:1.5rem 1.75rem;}
     table{width:100%;border-collapse:collapse;}
-    th{font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.5);padding:0.5rem 0;text-align:left;border-bottom:1px solid var(--border);font-weight:400;}
+    th{font-family:'Share Tech Mono',monospace;font-size:0.68rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,51,0,0.55);padding:0.5rem 0;text-align:left;border-bottom:1px solid rgba(255,51,0,0.12);font-weight:400;}
     td{font-family:'Bebas Neue',sans-serif;padding:0.85rem 0;border-bottom:1px solid var(--border);font-size:1rem;color:#ffffff;letter-spacing:2px;}
     tr:last-child td{border-bottom:none;}
+    tr:hover td{background:rgba(255,51,0,0.03);}
     tr:hover td:not(.s-live):not(.s-sold){color:var(--white);}
-    .s-live{color:var(--red-glow);font-size:1rem;letter-spacing:2px;}
+    .s-live{color:var(--red-glow);font-size:1rem;letter-spacing:2px;text-shadow:0 0 8px rgba(255,51,0,0.4);}
     .s-sold{color:rgba(255,255,255,0.4);font-size:1rem;letter-spacing:2px;}
     .p-pos{color:#4a9a4a;}.p-neg{color:var(--red);}
     .p-link{color:#ffffff;text-decoration:none;font-size:1rem;letter-spacing:2px;transition:color 0.15s;}
     .p-link:hover{color:var(--red-glow);}
     .empty{padding:3rem;text-align:center;}
-    .empty p{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.4);line-height:2.5;}
+    .empty p{font-family:'Share Tech Mono',monospace;font-size:0.75rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.3);line-height:3;}
 
     footer{border-top:1px solid var(--border);padding:1.75rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;max-width:860px;margin:0 auto;}
     .f-brand{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:5px;color:var(--muted);}
     .f-links{display:flex;gap:1.5rem;list-style:none;}
-    .f-links a{font-size:0.45rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+    .f-links a{font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.35);text-decoration:none;transition:color 0.2s;}
     .f-links a:hover{color:var(--white);}
-    .f-disc{width:100%;font-size:0.45rem;color:var(--muted);border-top:1px solid var(--border);padding-top:1rem;line-height:2;opacity:0.4;}
+    .f-disc{width:100%;font-size:0.7rem;color:rgba(255,255,255,0.3);border-top:1px solid var(--border);padding-top:1rem;line-height:2;}
 
     .reveal{opacity:0;transform:translateY(14px);transition:opacity 0.7s,transform 0.7s;}
     .reveal.visible{opacity:1;transform:translateY(0);}
@@ -195,7 +205,15 @@
     <span>Scroll</span>
     <div class="s-line"></div>
   </div>
+  <div class="eye-bottom-fade"></div>
 </section>
+
+<!-- SECTION DIVIDER -->
+<div class="section-divider">
+  <div class="divider-line"></div>
+  <span class="divider-text">[ SURVEILLANCE ACTIVE ]</span>
+  <div class="divider-line"></div>
+</div>
 
 <!-- CONTENT -->
 <section id="content">
@@ -208,23 +226,31 @@
     </div>
 
     <div class="cta-row reveal">
-      <a href="bot.html" class="btn-buy"><span>How The Bot Works</span></a>
-      <a href="https://pump.fun" target="_blank" class="btn-buy" id="buy-btn"><span style="display:flex;flex-direction:column;align-items:center;"><span>Buy $WATCHER</span><span style="font-size:0.7rem;letter-spacing:2px;">(Coming Soon)</span></span></a>
-      <a href="https://x.com/WatcherOnPump" target="_blank" class="btn-x">
-        <svg class="x-icon" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.261 5.635 5.903-5.635zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-        <span>@WatcherOnPump</span>
-      </a>
+      <div class="cta-hero">
+        <a href="https://pump.fun" target="_blank" class="btn-buy" id="buy-btn">
+          <span style="display:flex;flex-direction:column;align-items:center;">
+            <span>Buy $WATCHER</span>
+            <span style="font-size:0.7rem;letter-spacing:2px;">(Coming Soon)</span>
+          </span>
+        </a>
+      </div>
+      <div class="cta-secondary">
+        <a href="bot.html" class="btn-sec"><span>How The Bot Works</span></a>
+        <a href="https://x.com/WatcherOnPump" target="_blank" class="btn-sec">
+          <svg class="x-icon-sm" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.261 5.635 5.903-5.635z"/></svg>
+          <span>@WatcherOnPump</span>
+        </a>
+      </div>
     </div>
 
     <div class="stats reveal">
-      <div class="sbox">
+      <div class="sbox sbox-alert">
         <div class="sbox-label">Flood Coins Spawned</div>
         <div class="sbox-val alert" id="stat-flood">0</div>
         <div class="sbox-sub"><span style="display:inline-block;width:5px;height:5px;background:var(--red-glow);border-radius:50%;margin-right:4px;animation:recBlink 1.8s ease-in-out infinite;vertical-align:middle;"></span>Bot Active</div>
       </div>
       <div class="sbox">
         <div class="sbox-label">Total Supply</div>
-        <!-- UPDATE with your real supply -->
         <div class="sbox-val">1B</div>
         <div class="sbox-sub">$WATCHER Tokens</div>
       </div>
@@ -233,7 +259,7 @@
         <div class="sbox-val">SOL</div>
         <div class="sbox-sub">Solana · Pump.fun</div>
       </div>
-      <div class="sbox">
+      <div class="sbox sbox-alert">
         <div class="sbox-label">Watching</div>
         <div class="sbox-val alert">24/7</div>
         <div class="sbox-sub">It never sleeps</div>
@@ -241,7 +267,11 @@
     </div>
 
     <div class="tracker reveal">
-      <div class="tracker-head">Live Flood Feed</div>
+      <div class="tracker-head">
+        <span class="tracker-live"><span class="tracker-live-dot"></span>LIVE</span>
+        <span class="tracker-title">Flood Feed</span>
+        <span class="tracker-meta">STREAM:ACTIVE</span>
+      </div>
       <div id="tracker-out"></div>
     </div>
 
@@ -259,10 +289,6 @@
 </footer>
 
 <script>
-// ====================================================
-//  UPDATE CONTRACT ADDRESS:
-//  Change "TBD" below to your real CA after launch
-// ====================================================
 const CA = "TBD";
 const caEl = document.getElementById('ca-val');
 if (CA !== "TBD") {
